@@ -16,8 +16,8 @@ const int STORE_CLOSING = 12 + 7;
 
 const int PRICE_BOX = 25;
 const int PRICE_BALL = 50;
-const int PRICE_SKATE = 50;
-const int PRICE_DRONE = 20;
+const int PRICE_SKATE = 500;
+const int PRICE_DRONE = 2000;
 const int PRICE_FISH = 20;
 const int PRICE_PET = 30;
 const int PRICE_CHICKEN = 40;
@@ -888,7 +888,7 @@ void visitStore(PARAMS) {
                 if (itemsBought == 0) {
                     cout << "(these window shoppers...)" << endl;
                 } else if (itemsBought >= 4) {
-                    cout << "(this guy must be rich or something...)";
+                    cout << "(this guy must be rich or something...)" << endl;
                 }
                 prompt('G', "oodbye");
                 return;
