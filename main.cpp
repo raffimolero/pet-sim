@@ -1206,14 +1206,22 @@ void playEnding(PARAMS)
 
     case NewYear:
         // TODO:
+        // be careful not to invoke december 32 1999
+        // you went and took your pet on a trip to see the fireworks
+        // it saw its family
+        // they meet and stuff, but the pet decides to stay with you
         break;
 
     default:
         error();
         break;
     }
-    cout << "*Sigh.* At least it's happy now." << endl;
-    prompt('G', "oodbye...");
+
+    if (ending != NewYear)
+    {
+        cout << "*Sigh.* At least it's happy now." << endl;
+        prompt('G', "oodbye...");
+    }
 }
 
 void error()
