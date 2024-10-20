@@ -1,2 +1,2 @@
 g++ -o out main.cpp
-./out
+out
