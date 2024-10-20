@@ -9,49 +9,6 @@ using namespace std;
 // test stuff
 // replace these params before passing
 
-const int INCOME = 500;
-const int LOW_MONEY = 50;
-const int TIME_LATE_NIGHT = 12 + 8;
-const int STORE_CLOSING = 12 + 7;
-const int CLOCK_OUT = 10;
-
-const int PRICE_BOX = 25;
-const int PRICE_BALL = 50;
-const int PRICE_SKATE = 500;
-const int PRICE_DRONE = 2000;
-const int PRICE_FISH = 20;
-const int PRICE_PET = 30;
-const int PRICE_CHICKEN = 40;
-const int PRICE_BEEF = 60;
-
-// gameplay constants
-
-const int MAX_STAT = 100;
-const int NUTRITION_THRESHOLD = 50;
-const int HAPPINESS_THRESHOLD = 50;
-const int ENERGY_THRESHOLD = 50;
-const int SLEEP_TIME_MIN = 12 + 6;
-const int SLEEP_TIME_MAX = 12 + 10;
-const int HEALTH_BONUS = 5;
-const int SLEEP_ENERGY_BONUS = 50;
-const int SLEEP_NUTRITION_COST = 20;
-
-const int PLAY_FOOD_ENERGY = 50;
-const int PLAY_FOOD_HAPPINESS = 50;
-
-const int FOOD_LEFTOVER_ID = 0;
-const int FOOD_FISH_ID = 1;
-const int FOOD_PET_ID = 2;
-const int FOOD_CHICKEN_ID = 3;
-const int FOOD_BEEF_ID = 4;
-
-const int FOOD_ENERGY[] = {5, 10, 15, 20, 25};
-const int FOOD_NUTRITION[] = {5, 10, 15, 20, 25};
-const int FOOD_HAPPINESS[] = {5, 10, 15, 20, 25};
-
-const string MONTH = "December";
-const int YEAR = 1999;
-
 #define PARAMS                 \
     bool &toyBoxOwned,         \
         bool &toyBallOwned,    \
@@ -120,6 +77,51 @@ void quit(PARAMS);
 
 void ending(PARAMS);
 void error();
+
+const int INCOME = 500;
+const int LOW_MONEY = 50;
+const int TIME_LATE_NIGHT = 12 + 8;
+const int STORE_CLOSING = 12 + 7;
+const int CLOCK_OUT = 12 + 5;
+
+const int PRICE_BOX = 25;
+const int PRICE_BALL = 50;
+const int PRICE_SKATE = 500;
+const int PRICE_DRONE = 2000;
+const int PRICE_FISH = 20;
+const int PRICE_PET = 30;
+const int PRICE_CHICKEN = 40;
+const int PRICE_BEEF = 60;
+
+// gameplay constants
+
+const int MAX_STAT = 100;
+const int NUTRITION_THRESHOLD = 50;
+const int HAPPINESS_THRESHOLD = 50;
+const int ENERGY_THRESHOLD = 50;
+const int SLEEP_TIME_MIN = 12 + 6;
+const int SLEEP_TIME_MAX = 12 + 10;
+const int HEALTH_BONUS = 5;
+const int SLEEP_ENERGY_BONUS = 50;
+const int SLEEP_NUTRITION_COST = 20;
+
+// in-game stats
+
+const int PLAY_FOOD_ENERGY = 50;
+const int PLAY_FOOD_HAPPINESS = 50;
+
+const int FOOD_LEFTOVER_ID = 0;
+const int FOOD_FISH_ID = 1;
+const int FOOD_PET_ID = 2;
+const int FOOD_CHICKEN_ID = 3;
+const int FOOD_BEEF_ID = 4;
+
+const int FOOD_ENERGY[] = {5, 10, 15, 20, 25};
+const int FOOD_NUTRITION[] = {5, 10, 15, 20, 25};
+const int FOOD_HAPPINESS[] = {-5, 10, 15, 20, 25};
+
+const string MONTH = "December";
+const int YEAR = 1999;
 
 int main()
 {
@@ -203,6 +205,7 @@ void pause()
 
 void findPet(PARAMS)
 {
+    return;
     char choice;
     bool creatureAdopted = false;
 
@@ -784,19 +787,39 @@ void feed(PARAMS)
             validChoice = false;
             break;
         }
-            statChange("Chickend CounuggetoodPetCountChicken1);
-            id = 2;
+        statChange("Chicken nugget Count", foodChickenCount, -1, -1);
+        id = 3;
         break;
-        default:
+    case 'b':
+        if (foodBeefCount <= 0)
+        {
             validChoice = false;
+            break;
+        }
+        statChange("Beef slice Count", foodBeefCount, -1, -1);
+        id = 4;
         break;
+    default:
+        validChoice = false;
+        break;
+    }
+
+    statChange("Energy", energy, FOOD_ENERGY[id], MAX_STAT);
+    statChange("Nutrition", nutrition, FOOD_NUTRITION[id], MAX_STAT + 20);
+    statChange("Happiness", happiness, FOOD_HAPPINESS[id], MAX_STAT);
+    if (nutrition > MAX_STAT)
+    {
+        cout << name << " ate too much..." << endl;
+        statChange("Health", health, MAX_STAT - nutrition, MAX_STAT);
+        prompt('O', "ops...");
+    }
+    else
+    {
+        pause();
     }
 
     // TODO: increase nutrition and energy
     // happiness increases or decreases depending on food chosen
-    // select food item depending on money
-    // if energy is too high and the pet doesnt like the food, pet will play with food instead, calling play();
-    // if energy too low, the pet will refuse to eat
     // if nutrition exceeds a threshold, decrease health
     passTime(day, hour);
 }
@@ -1026,6 +1049,7 @@ void visitStore(PARAMS)
                 err = 2;
                 break;
             }
+            statChange("Pet Budget", money, -PRICE_BOX, -1);
             toyBoxOwned = true;
             break;
         case 'r':
@@ -1039,6 +1063,7 @@ void visitStore(PARAMS)
                 err = 2;
                 break;
             }
+            statChange("Pet Budget", money, -PRICE_BALL, -1);
             toyBallOwned = true;
             break;
         case 's':
@@ -1052,6 +1077,7 @@ void visitStore(PARAMS)
                 err = 2;
                 break;
             }
+            statChange("Pet Budget", money, -PRICE_SKATE, -1);
             toySkateOwned = true;
             break;
         case 'd':
@@ -1065,6 +1091,7 @@ void visitStore(PARAMS)
                 err = 2;
                 break;
             }
+            statChange("Pet Budget", money, -PRICE_DRONE, -1);
             toyDroneOwned = true;
             break;
 
@@ -1074,6 +1101,7 @@ void visitStore(PARAMS)
                 err = 2;
                 break;
             }
+            statChange("Pet Budget", money, -PRICE_FISH, -1);
             foodFishCount++;
             break;
         case 'p':
@@ -1082,6 +1110,7 @@ void visitStore(PARAMS)
                 err = 2;
                 break;
             }
+            statChange("Pet Budget", money, -PRICE_PET, -1);
             foodPetCount++;
             break;
         case 'c':
@@ -1090,6 +1119,7 @@ void visitStore(PARAMS)
                 err = 2;
                 break;
             }
+            statChange("Pet Budget", money, -PRICE_CHICKEN, -1);
             foodChickenCount++;
             break;
         case 'b':
@@ -1098,13 +1128,14 @@ void visitStore(PARAMS)
                 err = 2;
                 break;
             }
+            statChange("Pet Budget", money, -PRICE_BEEF, -1);
             foodBeefCount++;
             break;
-
         default:
             err = 1;
             break;
         }
+
         switch (err)
         {
         case 0:
