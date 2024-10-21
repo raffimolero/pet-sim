@@ -5,8 +5,7 @@ using namespace std;
 // sir please let us use classes and headers grrr i want more code organization
 
 // TODO:
-// bring magic numbers into constants
-// implement new year ending
+// sleep
 // add reactions to specific food
 // test more stuff
 // replace these params before passing
@@ -56,6 +55,7 @@ void checkFood(PARAMS);
 
 void play(PARAMS);
 void feed(PARAMS);
+void eat(PARAMS, int id);
 
 void passTime(int &day, int &hour, int amount);
 void sleep(PARAMS);
@@ -81,16 +81,24 @@ enum Ending
 };
 
 // gameplay constants
-const int INCOME = 500;
-const int LOW_MONEY = 50;
-const int DATE_LATE_GAME = 7 * 4;
+const int INCOME = 100;
 const int TIME_WAKE = 6;
 const int TIME_LATE_NIGHT = 12 + 8;
 const int STORE_CLOSING = 12 + 7;
 const int CLOCK_OUT = 12 + 6;
+const int DAY_LIMIT = 31;
+
+// other constants
+const int UNLIMITED = 0;
+const int LOW_MONEY = 50;
+const int DATE_LATE_GAME = 7 * 4;
+const int MANY_ITEMS_BOUGHT = 4;
 
 // pet related stats
 const int MAX_STAT = 100;
+const int MAX_NUTRITION_OVERFLOW = 20;
+
+// when sleeping
 const int NUTRITION_THRESHOLD = 50;
 const int HAPPINESS_THRESHOLD = 50;
 const int ENERGY_THRESHOLD = 50;
@@ -98,6 +106,7 @@ const int SLEEP_TIME_MIN = 12 + 6;
 const int SLEEP_TIME_MAX = 12 + 10;
 const int HEALTH_BONUS = 5;
 const int SLEEP_ENERGY_BONUS = 50;
+const int SLEEP_HAPPINESS_COST = 50;
 const int SLEEP_NUTRITION_COST = 20;
 
 // toy data
@@ -146,7 +155,7 @@ const string FOOD_COUNT_NAMES[] = {
     "Pet Food",
     "Chicken",
     "Steak"};
-const int FOOD_PRICES[] = {0, 20, 30, 40, 60};
+const int FOOD_PRICES[] = {0, 20, 40, 60, 80};
 const int FOOD_ENERGY_VALUES[] = {-2, 0, 2, 4, 6};
 const int FOOD_NUTRITION_VALUES[] = {5, 10, 15, 20, 25};
 const int FOOD_HAPPINESS_VALUES[] = {-5, 0, 5, 10, 15};
@@ -452,7 +461,7 @@ void check(PARAMS)
 void statCheck(string statName, int stat)
 {
     cout << statName << "[";
-    for (int i = MAX_STAT / 20; i < MAX_STAT; i += MAX_STAT / 10)
+    for (int i = MAX_STAT / 20; stat >= i; i += MAX_STAT / 10)
     {
         if (stat >= i)
         {
@@ -813,9 +822,14 @@ void feed(PARAMS)
         return;
     }
 
-    statChange(FOOD_COUNT_NAMES[id], foodsOwned[id], -1, -1);
+    statChange(FOOD_COUNT_NAMES[id], foodsOwned[id], -1, UNLIMITED);
+    eat(ARGS, id);
+    passTime(day, hour, 1);
+}
+
+void eat(PARAMS, int id) {
     statChange("Energy", energy, FOOD_ENERGY_VALUES[id], MAX_STAT);
-    statChange("Nutrition", nutrition, FOOD_NUTRITION_VALUES[id], MAX_STAT + 20);
+    statChange("Nutrition", nutrition, FOOD_NUTRITION_VALUES[id], MAX_STAT + MAX_NUTRITION_OVERFLOW);
     statChange("Happiness", happiness, FOOD_HAPPINESS_VALUES[id], MAX_STAT);
     if (nutrition > MAX_STAT)
     {
@@ -827,50 +841,41 @@ void feed(PARAMS)
     {
         pause();
     }
-
-    passTime(day, hour, 1);
 }
 
 void statChange(string statName, int &stat, int change, int cap)
 {
-    if (change == 0)
-    {
-        return;
-    }
+    int oldStat = stat;
 
     stat += change;
 
-    if (cap == -1)
+    if (cap > 0)
     {
-        return;
-    }
-    if (stat > cap)
-    {
-        stat = cap;
-    }
-    else if (stat < 0)
-    {
-        stat = 0;
+        stat = min(max(0, stat), cap);
+    } else if (cap < 0) {
+        stat = stat % -cap;
     }
 
-    if (change > 0)
+    if (stat == oldStat) {
+        return;
+    }
+    cout << statName;
+    if (stat > oldStat)
     {
-        cout << statName << " + " << change << endl;
+        cout << " + " << change;
     }
     else
     {
-        cout << statName << " - " << -change << endl;
+        cout << " - " << -change;
     }
+    cout << " (Now " << stat << ")" << endl;
 }
 
 void passTime(int &day, int &hour, int amount)
 {
-    statChange("Hour", hour, amount, -1);
-    if (hour >= 24)
-    {
-        statChange("Day", day, hour / 24, -1);
-        hour %= 24;
-    }
+    int hourAfterChange = hour + amount;
+    statChange("Hour", hour, amount, -24);
+    statChange("Day", day, hourAfterChange / 24, DAY_LIMIT + 1);
 }
 
 void sleep(PARAMS)
@@ -880,13 +885,14 @@ void sleep(PARAMS)
         "was", "very happy today",
         "was", "tired enough when it slept",
         "did", "sleep at the right time"};
-    bool sleptWell = hour >= SLEEP_TIME_MIN && hour <= SLEEP_TIME_MAX;
+    bool sleptWell = SLEEP_TIME_MIN <= hour && hour <= SLEEP_TIME_MAX;
     bool evalConditions[] = {
-        nutrition > NUTRITION_THRESHOLD,
-        happiness > HAPPINESS_THRESHOLD,
-        energy < ENERGY_THRESHOLD,
+        nutrition >= NUTRITION_THRESHOLD,
+        happiness >= HAPPINESS_THRESHOLD,
+        energy <= ENERGY_THRESHOLD,
         sleptWell};
     int healthChange;
+    int wakeTime = TIME_WAKE;
 
     cout << "Sleepy time..." << endl;
     prompt('G', "ood night...");
@@ -916,20 +922,12 @@ void sleep(PARAMS)
         nutrition,
         -SLEEP_NUTRITION_COST - day,
         MAX_STAT);
+    statChange(
+        "Happiness",
+        happiness,
+        -SLEEP_HAPPINESS_COST - day,
+        MAX_STAT);
     pause();
-
-    if (sleptWell)
-    {
-        cout << "Ah, a good night's sleep." << endl;
-        prompt('G', "ood morning.");
-    }
-    else
-    {
-        cout << "Ughh. I feel groggy. I don't want to wake up." << endl;
-        cout << "Can I sleep for 5 more minutes ? " << endl;
-        prompt('N', "o. Wake up.");
-    }
-    passTime(day, hour, (TIME_WAKE + 24 - hour) % 24);
 
     if (health <= 0)
     {
@@ -943,10 +941,25 @@ void sleep(PARAMS)
     {
         ending = Unhappy;
     }
-    else if (day > 31)
+    else if (day > DAY_LIMIT)
     {
         ending = NewYear;
+        wakeTime = 0;
     }
+    passTime(day, hour, (wakeTime + 24 - hour) % 24);
+
+    if (sleptWell)
+    {
+        cout << "Ah, a good night's sleep." << endl;
+        prompt('G', "ood morning.");
+    }
+    else
+    {
+        cout << "Ughh. I feel groggy. I don't want to wake up." << endl;
+        cout << "Can I sleep for 5 more minutes ? " << endl;
+        prompt('N', "o. Wake up.");
+    }
+
 
     if (ending != Ongoing)
     {
@@ -958,7 +971,7 @@ void sleep(PARAMS)
     passTime(day, hour, CLOCK_OUT - hour);
     cout << "Most of the money goes to keeping the house running, as usual..." << endl;
     cout << "...and " << INCOME << " goes for my pet's budget." << endl;
-    statChange("Pet Budget", money, 500, -1);
+    statChange("Pet Budget", money, INCOME, UNLIMITED);
     statChange("Leftovers", foodsOwned[Leftover], 1 - foodsOwned[Leftover], 1);
     cout << "I should probably check a couple things before doing anything." << endl;
     pause();
@@ -1016,7 +1029,7 @@ void visitStore(PARAMS)
             {
                 cout << "* (these window shoppers...)" << endl;
             }
-            else if (itemsBought >= 4)
+            else if (itemsBought >= MANY_ITEMS_BOUGHT)
             {
                 cout << "* (this guy must be rich or something...)" << endl;
             }
@@ -1103,7 +1116,7 @@ void visitStore(PARAMS)
         {
             foodsOwned[id]++;
         }
-        statChange("Pet Budget", money, -price, -1);
+        statChange("Pet Budget", money, -price, UNLIMITED);
         itemsBought++;
         cout << "'Thank you for your purchase!'" << endl;
         prompt('T', "hank you too");
@@ -1205,11 +1218,42 @@ void playEnding(PARAMS)
         break;
 
     case NewYear:
-        // TODO:
-        // be careful not to invoke december 32 1999
-        // you went and took your pet on a trip to see the fireworks
-        // it saw its family
-        // they meet and stuff, but the pet decides to stay with you
+        cout << "..." << endl;
+        prompt('Z', "zz...");
+        cout << "...rr..." << endl;
+        prompt('Z', "zz...");
+        cout << "prrr... prrr..." << endl;
+        prompt('H', "uh?");
+        cout << "Wh-" << endl;
+        cout << "*WHISTLEEEE*" << endl;
+        cout << "*BANG*" << endl;
+        cout << "Now playing: Wintergatan - Starmachine2000 (for extra immersion)" << endl;
+        statChange("Happiness", happiness, MAX_STAT, MAX_STAT * 2);
+        prompt('C', "heck calendar");
+        cout << "Let's look at how we're doing..." << endl;
+        cout << "Date: January 1, 2000" << endl;
+        prompt('C', "heck clock");
+        cout << "Let's look at how we're doing..." << endl;
+        showTime(hour);
+        prompt('C', "heck pet");
+        checkPet(ARGS);
+        cout << "WOW!" << endl;
+        prompt('G', "o outside");
+        cout << "*WHISTLE NYOOM SSSS-BOOM!* *c-r-a-c-k-l-e*" << endl;
+        cout << name << " jumps on your hand.";
+        prompt('L', "ift " + name + " up!");
+        cout << "Uppies!" << endl;
+        statChange("Happiness", happiness, TOY_HAPPINESS_VALUES[Hand], MAX_STAT * 2);
+        prompt('C', "all your neighbor Kate");
+        cout << "HEY! KATE! COME CHECK OUT THE FIREWORKS!" << endl;
+        cout << "* You mean the fireworks that _I_ launched?" << endl;
+        cout << "Those were yours?! They're amazing!" << endl;
+        cout << "* Yeah, I know." << endl;
+        cout << "* Hey animal thing, catch!" << endl;
+        eat(ARGS, Steak);
+        cout << "This is the best day ever, isn't it, " << name << "?" << endl;
+        cout << "* PUFF!" << endl;
+        prompt('T', "he end.");
         break;
 
     default:
