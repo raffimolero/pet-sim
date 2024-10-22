@@ -1,10 +1,6 @@
 #include <iostream>
-
 #include <string>
-
 using namespace std;
-
-// sir please let us use classes and headers grrr i want more code organization
 
 // TODO:
 // sleep
@@ -103,7 +99,7 @@ const int MAX_NUTRITION_OVERFLOW = 20;
 const int NUTRITION_THRESHOLD = 50;
 const int HAPPINESS_THRESHOLD = 50;
 const int ENERGY_THRESHOLD = 50;
-const int SLEEP_TIME_MIN = 12 + 6;
+const int SLEEP_TIME_MIN = 12 + 6; // TODO: rename to bedtime
 const int SLEEP_TIME_MAX = 12 + 10;
 const int HEALTH_BONUS = 5;
 const int SLEEP_ENERGY_BONUS = 50;
@@ -194,7 +190,6 @@ int main() {
     string name = "[unnamed creature]";
 
     findPet(ARGS);
-
     while (ending == Ongoing) {
         menu(ARGS);
     }
@@ -250,7 +245,7 @@ void findPet(PARAMS) {
     cout << "Welp, time to go home. Might as well walk." << endl;
     pause();
     cout << "Oh! What's this" << endl;
-    cout << "A strange, fluffy, triangular creature..." << endl;
+    cout << "A strange, rotund, perfectly spherical creature..." << endl;
 
     while (!creatureAdopted) {
         cout << "What will you do with this creature?" << endl;
@@ -518,7 +513,6 @@ void checkToys(PARAMS) {
     };
 
     cout << "Let's open the shelf." << endl;
-
     for (int i = 0; i < 4; i++) {
         if (toysOwned[i]) {
             cout << TOY_CHECK_MESSAGES[i] << endl;
@@ -562,7 +556,6 @@ void checkFood(PARAMS) {
     };
 
     cout << "Let's look at our food in the fridge." << endl;
-
     for (int i = 0; i < 5; i++) {
         if (foodsOwned[i] > 0) {
             cout << "We have " << foodsOwned[i] << " " << TEXT[i * 3];
@@ -594,15 +587,12 @@ void play(PARAMS) {
     int energyCost, happinessValue;
 
     cout << "What will " << name << " play with today?" << endl;
-
     cout << "> [B]ack..." << endl;
-
     for (int i = 0; i < 5; i++) {
         if (toysOwned[i]) {
             cout << "> " << TOY_PROMPTS[i] << endl;
         }
     }
-
     cout << "> ";
     cin >> choice;
     choice = tolower(choice);
@@ -692,14 +682,12 @@ void feed(PARAMS) {
     int energyValue, happinessValue, nutritionValue;
 
     cout << "What should we feed " << name << "?" << endl;
-
     cout << "> [B]ack..." << endl;
     for (int i = 0; i < 5; i++) {
         if (foodsOwned[i] > 0) {
             cout << "> " << FOOD_PROMPTS[i] << " (" << foodsOwned[i] << " left)" << endl;
         }
     }
-
     cout << "> ";
     cin >> choice;
     choice = tolower(choice);
@@ -776,7 +764,6 @@ void eat(PARAMS, int id) {
 
 void statChange(string statName, int & stat, int change, int cap) {
     int oldStat = stat;
-
     stat += change;
 
     if (cap > 0) {
@@ -788,6 +775,7 @@ void statChange(string statName, int & stat, int change, int cap) {
     if (stat == oldStat) {
         return;
     }
+
     cout << statName;
     if (stat > oldStat) {
         cout << " + " << change;
@@ -844,17 +832,20 @@ void sleep(PARAMS) {
         "Energy",
         energy,
         SLEEP_ENERGY_BONUS - day,
-        MAX_STAT);
+        MAX_STAT
+    );
     statChange(
         "Nutrition",
         nutrition,
         -SLEEP_NUTRITION_COST - day,
-        MAX_STAT);
+        MAX_STAT
+    );
     statChange(
         "Happiness",
         happiness,
         -SLEEP_HAPPINESS_COST - day,
-        MAX_STAT);
+        MAX_STAT
+    );
     pause();
 
     if (health <= 0) {
