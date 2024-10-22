@@ -3,15 +3,20 @@
 using namespace std;
 
 /* walkthrough: just copy paste these into the terminal and they will play the game for you
+TODO: [DRONE ENDING - FISHBOARD STRAT]
+[DRONE ENDING - STEAKBOARD STRAT]
 oaooo Puff yh fcfo phlo sgoogwo
 fffo fffo phlo phlo sgoogwo
 flfo phlo phlo phlo sgoogwo
 vktststlg fsfo pkoo sgoogwo
 flfo flfo flfo pkoo sgoogwo
+flfo flfo fsfo pkoo sgoogwo
+vststststlg fsfo pkoo pkoo sgoogwo
 */
 
 // TODO:
 // test more stuff
+// enjoy game
 // replace these params before passing
 
 #define PARAMS \
@@ -67,7 +72,7 @@ void feedWith(PARAMS, int id);
 void passTime(int & day, int & hour, int amount);
 void sleep(PARAMS);
 void statCheck(string statName, int stat);
-void statChange(string statName, int & stat, int change, int cap);
+int statChange(string statName, int& stat, int change, int cap);
 void visitStore(PARAMS);
 
 void quit(PARAMS);
@@ -865,20 +870,28 @@ void feedWith(PARAMS, int id) {
     }
 }
 
-// if cap is positive, that is the maximum possible value for that stat.
-// if cap is negative, will use modulo.
-void statChange(string statName, int& stat, int change, int cap) {
+// if cap is positive, caps the stat to a max value and returns the overflow.
+// if cap is negative, will use modulo and returns the quotient.
+int statChange(string statName, int& stat, int change, int cap) {
     int oldStat = stat;
+    int output = 0;
     stat += change;
 
     if (cap > 0) {
-        stat = min(max(0, stat), cap);
+        if (stat < 0) {
+            output = stat;
+            stat = 0;
+        } else if (stat > cap) {
+            output = stat - cap;
+            stat = cap;
+        }
     } else if (cap < 0) {
+        output = stat / -cap;
         stat = stat % -cap;
     }
 
-    if (stat == oldStat) {
-        return;
+    if (change == 0) {
+        return output;
     }
 
     cout << statName;
@@ -887,13 +900,21 @@ void statChange(string statName, int& stat, int change, int cap) {
     } else {
         cout << " - " << -change;
     }
-    cout << " (Now " << stat << ")" << endl;
+    if (output == 0) {
+        cout << " (Now ";
+    } else if (cap > 0) {
+        cout << " (Capped at ";
+    } else if (cap < 0) {
+        cout << " (Wrapped around to ";
+    }
+    cout << stat << ")" << endl;
+
+    return output;
 }
 
 void passTime(int & day, int & hour, int amount) {
-    int hourAfterChange = hour + amount;
-    statChange("Hour", hour, amount, -24);
-    statChange("Day", day, hourAfterChange / 24, DAY_LIMIT + 1);
+    int daysPassed = statChange("Hour", hour, amount, -24);
+    statChange("Day", day, daysPassed, DAY_LIMIT + 1);
 }
 
 void sleep(PARAMS) {
