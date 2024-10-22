@@ -793,14 +793,10 @@ void passTime(int & day, int & hour, int amount) {
 
 void sleep(PARAMS) {
     const string EVAL_STRINGS[] = {
-        "has",
-        "been eating well",
-        "was",
-        "very happy today",
-        "was",
-        "tired enough when it slept",
-        "did",
-        "sleep at the right time"
+        "has", "been eating well",
+        "was", "very happy today",
+        "was", "tired enough when it slept",
+        "did", "sleep at the right time"
     };
     bool sleptWell = SLEEP_TIME_MIN <= hour && hour <= SLEEP_TIME_MAX;
     bool evalConditions[] = {
