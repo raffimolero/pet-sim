@@ -2,11 +2,13 @@
 #include <string>
 using namespace std;
 
-// walkthrough: just copy paste these into the terminal and they will play the game for you
-// intro: oaooo Puff yh
-// day 1: fcfo phlo sgoogwo
-// day 2: 
-// quit: gyyogoogyoog
+/* walkthrough: just copy paste these into the terminal and they will play the game for you
+oaooo Puff yh fcfo phlo sgoogwo
+fffo fffo phlo phlo sgoogwo
+flfo phlo phlo phlo sgoogwo
+vktststlg fsfo pkoo sgoogwo
+flfo flfo flfo pkoo sgoogwo
+*/
 
 // TODO:
 // test more stuff
@@ -76,7 +78,6 @@ void error();
 // endings
 enum Ending {
     Ongoing,
-    SkipQuit,
     GiveUp,
     Sick,
     Hungry,
@@ -110,13 +111,12 @@ const int MAX_NUTRITION_OVERFLOW = 20;
 const int HEALTHY_HAPPINESS_MIN = 50;
 const int HEALTHY_NUTRITION_MIN = 50;
 const int HEALTHY_ENERGY_MAX = 50;
-
-const int BEDTIME_MIN = 12 + 6;
-const int BEDTIME_MAX = 12 + 10;
+const int HEALTHY_BEDTIME_MIN = 12 + 6;
+const int HEALTHY_BEDTIME_MAX = 12 + 10;
 const int HEALTH_BONUS = 5;
-const int SLEEP_HAPPINESS_COST = 10;
+const int SLEEP_HAPPINESS_COST = 20;
 const int SLEEP_NUTRITION_COST = 10;
-const int SLEEP_ENERGY_BONUS = 20;
+const int SLEEP_ENERGY_BONUS = 10;
 
 // toy data
 enum Toy {
@@ -170,7 +170,7 @@ const string FOOD_COUNT_NAMES[] = {
     "Steak"
 };
 const int FOOD_PRICES[]           = { 0, 20, 40, 60, 80}; 
-const int FOOD_ENERGY_VALUES[]    = {-2,  0,  2,  4,  6}; 
+const int FOOD_ENERGY_VALUES[]    = {-5,  0,  5, 10, 15}; 
 const int FOOD_NUTRITION_VALUES[] = { 5, 10, 15, 20, 25}; 
 const int FOOD_HAPPINESS_VALUES[] = {-5,  0,  5, 10, 15};
 const string MONTH = "December";
@@ -493,7 +493,7 @@ void checkPet(PARAMS) {
 }
 
 void checkCalendar(PARAMS) {
-    int timeLeft = BEDTIME_MAX - hour;
+    int timeLeft = HEALTHY_BEDTIME_MAX - hour;
     cout << "Let's look at how we're doing..." << endl;
 
     cout << "Date: " << MONTH << " " << day << ", " << YEAR << endl;
@@ -620,7 +620,6 @@ void play(PARAMS) {
     char choice;
     bool validChoice = true;
     int id;
-    int energyCost, happinessValue;
 
     while (true) {
         cout << "What will " << name << " play with today?" << endl;
@@ -667,7 +666,6 @@ void play(PARAMS) {
         if (!toysOwned[id]) {
             validChoice = false;
         }
-        // TODO: energy cost
         if (!validChoice) {
             cout << "[Invalid option]" << endl;
             pause();
@@ -681,6 +679,14 @@ void play(PARAMS) {
 }
 
 void playWith(PARAMS, int id) {
+    int energyCost = TOY_ENERGY_COSTS[id];
+    if (energyCost > energy) {
+        cout << "Hey, " << name << "... you wanna play?" << endl;
+        cout << "..." << endl;
+        cout << "Hm. Looks like " << name << " is too tired for that." << endl;
+        pause();
+    }
+
     switch (id) {
     case Hand:
         cout << "Come on, " << name << "... you know you want to climb up on my hand!" << endl;
@@ -721,7 +727,7 @@ void playWith(PARAMS, int id) {
         return;
     }
     statChange("Happiness", happiness, TOY_HAPPINESS_VALUES[id], MAX_STAT);
-    statChange("Energy", energy, -TOY_ENERGY_COSTS[id], MAX_STAT);
+    statChange("Energy", energy, -energyCost, MAX_STAT);
 }
 
 void feed(PARAMS) {
@@ -749,7 +755,11 @@ void feed(PARAMS) {
 
     case 'l':
         id = Leftover;
-        if (energy > PLAY_FOOD_ENERGY_MIN && happiness > PLAY_FOOD_HAPPINESS_MIN) {
+        if (
+            happiness > PLAY_FOOD_HAPPINESS_MIN &&
+            nutrition > PLAY_FOOD_NUTRITION_MAX &&
+            energy > PLAY_FOOD_ENERGY_MIN
+        ) {
             cout << "Hmm. " << name << " doesn't seem to like the food." << endl;
             pause();
             cout << "Wait... what is it doing with the food?" << endl;
@@ -894,7 +904,7 @@ void sleep(PARAMS) {
         "did", "sleep at the right time"
     };
     const int EVAL_COUNT = 4;
-    bool sleptWell = BEDTIME_MIN <= hour && hour <= BEDTIME_MAX;
+    bool sleptWell = HEALTHY_BEDTIME_MIN <= hour && hour <= HEALTHY_BEDTIME_MAX;
     int healthChange;
     int happinessCost = SLEEP_HAPPINESS_COST;
     int nutritionCost = SLEEP_NUTRITION_COST;
@@ -1138,7 +1148,6 @@ void quit(PARAMS) {
 
 void playEnding(PARAMS) {
     switch (ending) {
-    case SkipQuit:
     case Ongoing:
         return;
 
