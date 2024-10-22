@@ -2,26 +2,30 @@
 #include <string>
 using namespace std;
 
+// walkthrough: just copy paste these into the terminal and they will play the game for you
+// intro: oaooo Puff yh
+// day 1: fcfo phlo sgoogwo
+// day 2: 
+// quit: gyyogoogyoog
+
 // TODO:
-// sleep
-// add reactions to specific food
 // test more stuff
 // replace these params before passing
 
-#define PARAMS\
+#define PARAMS \
     bool toysOwned[], \
     int foodsOwned[], \
-    int & happiness, \
-    int & nutrition, \
-    int & energy, \
-    int & health, \
-    string & name, \
-    int & money, \
-    int & day, \
-    int & hour, \
-    int & ending
+    int& happiness, \
+    int& nutrition, \
+    int& energy, \
+    int& health, \
+    string& name, \
+    int& money, \
+    int& day, \
+    int& hour, \
+    int& ending
 
-#define ARGS\
+#define ARGS \
     toysOwned, \
     foodsOwned, \
     happiness, \
@@ -34,6 +38,7 @@ using namespace std;
     hour, \
     ending
 
+// TODO: char getChar(char& choice);
 bool confirm(string text);
 void prompt(char expected, string text);
 void pause();
@@ -42,6 +47,7 @@ void findPet(PARAMS);
 void namePet(PARAMS);
 void menu(PARAMS);
 
+int petScore(PARAMS);
 void remarkAboutPet(PARAMS);
 
 void check(PARAMS);
@@ -52,8 +58,9 @@ void checkToys(PARAMS);
 void checkFood(PARAMS);
 
 void play(PARAMS);
+void playWith(PARAMS, int id);
 void feed(PARAMS);
-void eat(PARAMS, int id);
+void feedWith(PARAMS, int id);
 
 void passTime(int & day, int & hour, int amount);
 void sleep(PARAMS);
@@ -69,6 +76,7 @@ void error();
 // endings
 enum Ending {
     Ongoing,
+    SkipQuit,
     GiveUp,
     Sick,
     Hungry,
@@ -79,32 +87,36 @@ enum Ending {
 
 // gameplay constants
 const int INCOME = 100;
+const int MIDNIGHT = 0;
 const int TIME_WAKE = 6;
-const int TIME_LATE_NIGHT = 12 + 8;
 const int STORE_CLOSING = 12 + 7;
 const int CLOCK_OUT = 12 + 6;
 const int DAY_LIMIT = 31;
 
 // other constants
+const int INTRO_LEAVE_HAPPINESS_COST = 10;
+const int INTRO_LEAVE_ENERGY_COST = 10;
 const int UNLIMITED = 0;
 const int LOW_MONEY = 50;
 const int DATE_LATE_GAME = 7 * 4;
 const int MANY_ITEMS_BOUGHT = 4;
 
 // pet related stats
+const int GREETING_SCORE_MIN = 80;
 const int MAX_STAT = 100;
 const int MAX_NUTRITION_OVERFLOW = 20;
 
 // when sleeping
-const int NUTRITION_THRESHOLD = 50;
-const int HAPPINESS_THRESHOLD = 50;
-const int ENERGY_THRESHOLD = 50;
-const int SLEEP_TIME_MIN = 12 + 6; // TODO: rename to bedtime
-const int SLEEP_TIME_MAX = 12 + 10;
+const int HEALTHY_HAPPINESS_MIN = 50;
+const int HEALTHY_NUTRITION_MIN = 50;
+const int HEALTHY_ENERGY_MAX = 50;
+
+const int BEDTIME_MIN = 12 + 6;
+const int BEDTIME_MAX = 12 + 10;
 const int HEALTH_BONUS = 5;
-const int SLEEP_ENERGY_BONUS = 50;
-const int SLEEP_HAPPINESS_COST = 50;
-const int SLEEP_NUTRITION_COST = 20;
+const int SLEEP_HAPPINESS_COST = 10;
+const int SLEEP_NUTRITION_COST = 10;
+const int SLEEP_ENERGY_BONUS = 20;
 
 // toy data
 enum Toy {
@@ -115,6 +127,8 @@ enum Toy {
     Drone,
     Food,
 };
+const int TOY_COUNT = 5;
+const int TOY_COUNT_FULL = 6;
 
 const string TOY_PROMPTS[] = {
     "my [H]and",
@@ -123,12 +137,13 @@ const string TOY_PROMPTS[] = {
     "cool s[K]ateboard",
     "super cool [D]rone"
 };
-const int TOY_PRICES[]           = {0, 25, 50, 500, 2000};
-const int TOY_ENERGY_COSTS[]     = {5,  5, 10,  15,   25, 5};
-const int TOY_HAPPINESS_VALUES[] = {5,  5, 10,  15,   25, 5};
+const int TOY_PRICES[]           = { 0, 25, 50, 300, 1500};
+const int TOY_ENERGY_COSTS[]     = { 5, 10, 10,  15,   25, 5};
+const int TOY_HAPPINESS_VALUES[] = {10, 15, 20,  25,   50, 5};
 
-const int PLAY_FOOD_ENERGY_THRESHOLD = 50;
-const int PLAY_FOOD_HAPPINESS_THRESHOLD = 50;
+const int PLAY_FOOD_HAPPINESS_MIN = 50;
+const int PLAY_FOOD_NUTRITION_MAX = HEALTHY_NUTRITION_MIN;
+const int PLAY_FOOD_ENERGY_MIN = 50;
 
 // food data
 enum Food {
@@ -138,6 +153,7 @@ enum Food {
     Chicken,
     Steak,
 };
+const int FOOD_COUNT = 5;
 
 const string FOOD_PROMPTS[] = {
     "some [L]eftovers from last meal",
@@ -176,18 +192,18 @@ int main() {
         0 // steak
     };
 
-    // other stats
-    int money = 200;
-    int day = 1;
-    int hour = 12 + 8;
-    int ending = Ongoing;
-
     // pet stats
     int happiness = 30;
     int nutrition = 30;
     int energy = 30;
     int health = 30;
     string name = "[unnamed creature]";
+
+    // other stats
+    int money = 200;
+    int day = 1;
+    int hour = 12 + 8;
+    int ending = Ongoing;
 
     findPet(ARGS);
     while (ending == Ongoing) {
@@ -236,7 +252,6 @@ void pause() {
 }
 
 void findPet(PARAMS) {
-    return;
     char choice;
     bool creatureAdopted = false;
 
@@ -286,8 +301,8 @@ void findPet(PARAMS) {
             pause();
             cout << "Might as well name it." << endl;
 
-            happiness -= 10;
-            energy -= 10;
+            happiness -= INTRO_LEAVE_HAPPINESS_COST;
+            energy -= INTRO_LEAVE_ENERGY_COST;
             creatureAdopted = true;
             break;
 
@@ -308,20 +323,24 @@ void namePet(PARAMS) {
         cout << "> ";
         cin >> name;
         cout << endl;
-    } while (!confirm("Are you sure you want to call your pet " + name + "?"));
+    } while (!confirm("Are you sure you want to call your pet " + name + "? (Can be renamed)"));
     cout << "Alright. Say hello to " << name << "!" << endl;
     prompt('H', "ello!");
 }
 
+int petScore(PARAMS) {
+    return (happiness + nutrition + energy + health) / 40;
+}
+
 void remarkAboutPet(PARAMS) {
-    int score = (happiness + nutrition + energy + health) / 40;
+    int score = petScore(ARGS);
     const string REMARKS[] = {
         "Listen. ", " deserves better.",
         "Uh, ", " looks a bit sick.",
         "Hm. ", " doesn't look too good.",
         "Hey, looks like ", " needs a little care.",
         "Take care of ", "!",
-        "Say hi to", " again!",
+        "Say hi to ", " again!",
         "Looks like ", " is looking good!",
         "Who is it? It's ", "!",
         "Aww, ", " is so cute.",
@@ -353,7 +372,11 @@ void menu(PARAMS) {
 
     cout << "What would you like to do?" << endl;
     cout << "> [C]heck something" << endl;
-    cout << "> [V]isit the Pet Store" << endl;
+    cout << "> [V]isit the Pet Store";
+    if (hour > STORE_CLOSING) {
+        cout << " (closed)";
+    }
+    cout << endl;
     cout << "> [R]ename " << name << endl;
     cout << "> [P]lay with " << name << endl;
     cout << "> [F]eed " << name << endl;
@@ -446,7 +469,11 @@ void check(PARAMS) {
 
 void statCheck(string statName, int stat) {
     cout << statName << "[";
-    for (int i = MAX_STAT / 20; stat >= i; i += MAX_STAT / 10) {
+    for (
+        int i = MAX_STAT / 20;
+        stat >= i || i < MAX_STAT;
+        i += MAX_STAT / 10
+    ) {
         if (stat >= i) {
             cout << "#";
         } else {
@@ -466,6 +493,7 @@ void checkPet(PARAMS) {
 }
 
 void checkCalendar(PARAMS) {
+    int timeLeft = BEDTIME_MAX - hour;
     cout << "Let's look at how we're doing..." << endl;
 
     cout << "Date: " << MONTH << " " << day << ", " << YEAR << endl;
@@ -474,11 +502,18 @@ void checkCalendar(PARAMS) {
     }
 
     showTime(hour);
-    if (hour >= TIME_LATE_NIGHT) {
-        cout << "It's getting late. We should sleep soon." << endl;
+    if (timeLeft < 0) {
+        cout << "*Sigh.* It's getting really late. We should've slept earlier." << endl;
+    } else if (timeLeft == 0) {
+        cout << "It's getting late. We should sleep now." << endl;
+    } else if (timeLeft == 1) {
+        cout << "I still have 1 hour left with " << name << " tonight." << endl;
+        cout << "I'll have to make the most of it." << endl;
+    } else {
+        cout << "I still have " << timeLeft << " hours with " << name << "." << endl;
     }
 
-    cout << "Money: " << money << endl;
+    cout << "Pet Budget: PHP " << money << endl;
     if (money < LOW_MONEY) {
         cout << "Uff. Well, all of that money was saved up just for " << name << ", anyway." << endl;
         cout << "I have enough in my real savings account." << endl;
@@ -513,9 +548,9 @@ void checkToys(PARAMS) {
     };
 
     cout << "Let's open the shelf." << endl;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 1; i < TOY_COUNT; i++) {
         if (toysOwned[i]) {
-            cout << TOY_CHECK_MESSAGES[i] << endl;
+            cout << TOY_CHECK_MESSAGES[i - 1] << endl;
             toyCount++;
         }
     }
@@ -524,6 +559,7 @@ void checkToys(PARAMS) {
     switch (toyCount) {
     case 0:
         cout << "There's nothing. Maybe I could buy something." << endl;
+        cout << "In the meantime, I could just lift " << name << " up with my hands." << endl;
         break;
 
     case 1:
@@ -556,7 +592,7 @@ void checkFood(PARAMS) {
     };
 
     cout << "Let's look at our food in the fridge." << endl;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < FOOD_COUNT; i++) {
         if (foodsOwned[i] > 0) {
             cout << "We have " << foodsOwned[i] << " " << TEXT[i * 3];
             if (foodsOwned[i] != 1) {
@@ -586,68 +622,89 @@ void play(PARAMS) {
     int id;
     int energyCost, happinessValue;
 
-    cout << "What will " << name << " play with today?" << endl;
-    cout << "> [B]ack..." << endl;
-    for (int i = 0; i < 5; i++) {
-        if (toysOwned[i]) {
-            cout << "> " << TOY_PROMPTS[i] << endl;
+    while (true) {
+        cout << "What will " << name << " play with today?" << endl;
+        cout << "> [B]ack..." << endl;
+        for (int i = 0; i < TOY_COUNT; i++) {
+            if (toysOwned[i]) {
+                cout << "> " << TOY_PROMPTS[i] << endl;
+            }
         }
-    }
-    cout << "> ";
-    cin >> choice;
-    choice = tolower(choice);
-    cout << endl;
+        cout << "> ";
+        cin >> choice;
+        choice = tolower(choice);
+        cout << endl;
 
-    // TODO: separate play() and playWith()
-    switch (choice) {
-    case 'b':
-        return;
+        switch (choice) {
+        case 'b':
+            return;
+            break;
+
+        case 'h':
+            id = Hand;
+            break;
+
+        case 'x':
+            id = Box;
+            break;
+
+        case 'r':
+            id = Ball;
+            break;
+
+        case 'k':
+            id = Skate;
+            break;
+
+        case 'd':
+            id = Drone;
+            break;
+
+        default:
+            validChoice = false;
+            break;
+        }
+        if (!toysOwned[id]) {
+            validChoice = false;
+        }
+        // TODO: energy cost
+        if (!validChoice) {
+            cout << "[Invalid option]" << endl;
+            pause();
+            continue;
+        }
+        playWith(ARGS, id);
+        passTime(day, hour, 1);
+        pause();
         break;
+    }
+}
 
-    case 'h':
-        id = Hand;
+void playWith(PARAMS, int id) {
+    switch (id) {
+    case Hand:
         cout << "Come on, " << name << "... you know you want to climb up on my hand!" << endl;
         prompt('L', "ift " + name + " up!");
         cout << "Uppies!" << endl;
         break;
 
-    case 'x':
-        id = Box;
-        if (!toysOwned[id]) {
-            validChoice = false;
-            break;
-        }
+    case Box:
         cout << "It's time to sit in the fort!" << endl;
         cout << name << " gets the smaller box, I get the bigger one. Hehe." << endl;
         pause();
         break;
 
-    case 'r':
-        id = Ball;
-        if (!toysOwned[id]) {
-            validChoice = false;
-            break;
-        }
+    case Ball:
         cout << name << " seems to be running across the whole house with that ball..." << endl;
         pause();
         break;
 
-    case 'k':
-        id = Skate;
-        if (!toysOwned[id]) {
-            validChoice = false;
-            break;
-        }
+    case Skate:
         cout << "Aww, look at " << name << " go!" << endl;
         pause();
         break;
 
-    case 'd':
-        id = Drone;
-        if (!toysOwned[id]) {
-            validChoice = false;
-            break;
-        }
+    case Drone:
         cout << "Alright. Strap on, " << name << "..." << endl;
         prompt('S', "eatbelts locked!");
         prompt('3', "!");
@@ -660,19 +717,11 @@ void play(PARAMS) {
         break;
 
     default:
-        validChoice = false;
-        break;
-    }
-    if (!validChoice) {
-        cout << "[Invalid option]" << endl;
-        pause();
+        error();
         return;
     }
-
     statChange("Happiness", happiness, TOY_HAPPINESS_VALUES[id], MAX_STAT);
     statChange("Energy", energy, -TOY_ENERGY_COSTS[id], MAX_STAT);
-    passTime(day, hour, 1);
-    pause();
 }
 
 void feed(PARAMS) {
@@ -700,7 +749,7 @@ void feed(PARAMS) {
 
     case 'l':
         id = Leftover;
-        if (energy > PLAY_FOOD_ENERGY_THRESHOLD && happiness > PLAY_FOOD_HAPPINESS_THRESHOLD) {
+        if (energy > PLAY_FOOD_ENERGY_MIN && happiness > PLAY_FOOD_HAPPINESS_MIN) {
             cout << "Hmm. " << name << " doesn't seem to like the food." << endl;
             pause();
             cout << "Wait... what is it doing with the food?" << endl;
@@ -743,13 +792,57 @@ void feed(PARAMS) {
         return;
     }
 
+    feedWith(ARGS, id);
     statChange(FOOD_COUNT_NAMES[id], foodsOwned[id], -1, UNLIMITED);
-    // TODO: rename to feedWith
-    eat(ARGS, id);
     passTime(day, hour, 1);
 }
 
-void eat(PARAMS, int id) {
+void feedWith(PARAMS, int id) {
+    bool onlyLeftover = true;
+    for (int i = 0; i < FOOD_COUNT; i++) {
+       if (foodsOwned[i] > 0) {
+           onlyLeftover = false;
+           break;
+       }
+    }
+    switch (id) {
+    case Leftover:
+        cout << "Sorry, " << name << "... but this is all ";
+        if (onlyLeftover) {
+            cout << "we have." << endl;
+        } else {
+            cout << "you'll get for now." << endl;
+        }
+        prompt('F', "eed");
+        break;
+
+    case Fish:
+        cout << "Have a fish." << endl;
+        cout << "Good thing these are boneless." << endl;
+        prompt('F', "eed");
+        break;
+
+    case PetFood:
+        cout << "Psst... " << name << "..." << endl;
+        prompt('C', "atch!");
+        break;
+
+    case Chicken:
+        cout << "I used to love these as a kid." << endl;
+        cout << "Well... I still do." << endl;
+        prompt('F', "eed");
+        break;
+
+    case Steak:
+        cout << "Mom wouldn't want me to feed you something this expensive..." << endl;
+        cout << "But have at it, " << name << "!" << endl;
+        prompt('F', "eed...");
+        break;
+
+    default:
+        error();
+        return;
+    }
     statChange("Energy", energy, FOOD_ENERGY_VALUES[id], MAX_STAT);
     statChange("Nutrition", nutrition, FOOD_NUTRITION_VALUES[id], MAX_STAT + MAX_NUTRITION_OVERFLOW);
     statChange("Happiness", happiness, FOOD_HAPPINESS_VALUES[id], MAX_STAT);
@@ -762,7 +855,9 @@ void eat(PARAMS, int id) {
     }
 }
 
-void statChange(string statName, int & stat, int change, int cap) {
+// if cap is positive, that is the maximum possible value for that stat.
+// if cap is negative, will use modulo.
+void statChange(string statName, int& stat, int change, int cap) {
     int oldStat = stat;
     stat += change;
 
@@ -777,7 +872,7 @@ void statChange(string statName, int & stat, int change, int cap) {
     }
 
     cout << statName;
-    if (stat > oldStat) {
+    if (change > 0) {
         cout << " + " << change;
     } else {
         cout << " - " << -change;
@@ -793,19 +888,23 @@ void passTime(int & day, int & hour, int amount) {
 
 void sleep(PARAMS) {
     const string EVAL_STRINGS[] = {
-        "has", "been eating well",
         "was", "very happy today",
+        "has", "been eating well",
         "was", "tired enough when it slept",
         "did", "sleep at the right time"
     };
-    bool sleptWell = SLEEP_TIME_MIN <= hour && hour <= SLEEP_TIME_MAX;
+    const int EVAL_COUNT = 4;
+    bool sleptWell = BEDTIME_MIN <= hour && hour <= BEDTIME_MAX;
+    int healthChange;
+    int happinessCost = SLEEP_HAPPINESS_COST;
+    int nutritionCost = SLEEP_NUTRITION_COST;
+    int energyBonus = SLEEP_ENERGY_BONUS;
     bool evalConditions[] = {
-        nutrition >= NUTRITION_THRESHOLD,
-        happiness >= HAPPINESS_THRESHOLD,
-        energy <= ENERGY_THRESHOLD,
+        happiness >= HEALTHY_HAPPINESS_MIN,
+        nutrition >= HEALTHY_NUTRITION_MIN,
+        energy <= HEALTHY_ENERGY_MAX,
         sleptWell
     };
-    int healthChange;
     int wakeTime = TIME_WAKE;
 
     cout << "Sleepy time..." << endl;
@@ -813,7 +912,7 @@ void sleep(PARAMS) {
 
     cout << name << "'s health changes as it sleeps..." << endl;
     pause();
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < EVAL_COUNT; i++) {
         healthChange = HEALTH_BONUS;
         cout << "Your pet " << EVAL_STRINGS[i * 2] << " ";
         if (!evalConditions[i]) {
@@ -824,22 +923,26 @@ void sleep(PARAMS) {
         statChange("Health", health, healthChange, MAX_STAT);
     }
 
+    if (!sleptWell) {
+        energyBonus /= 2;
+        happinessCost *= 2;
+    }
     statChange(
         "Energy",
         energy,
-        SLEEP_ENERGY_BONUS - day,
+        energyBonus + day,
         MAX_STAT
     );
     statChange(
         "Nutrition",
         nutrition,
-        -SLEEP_NUTRITION_COST - day,
+        -nutritionCost - day,
         MAX_STAT
     );
     statChange(
         "Happiness",
         happiness,
-        -SLEEP_HAPPINESS_COST - day,
+        -happinessCost - day,
         MAX_STAT
     );
     pause();
@@ -852,7 +955,7 @@ void sleep(PARAMS) {
         ending = Unhappy;
     } else if (day > DAY_LIMIT) {
         ending = NewYear;
-        wakeTime = 0;
+        wakeTime = MIDNIGHT;
     }
     passTime(day, hour, (wakeTime + 24 - hour) % 24);
 
@@ -869,13 +972,20 @@ void sleep(PARAMS) {
         return;
     }
 
-    cout << name << " is still sleeping. I'll go to work." << endl;
+    cout << name << " is still sleeping. I'll get ready for work." << endl;
     prompt('W', "ork");
     passTime(day, hour, CLOCK_OUT - hour);
     cout << "Most of the money goes to keeping the house running, as usual..." << endl;
     cout << "...and " << INCOME << " goes for my pet's budget." << endl;
     statChange("Pet Budget", money, INCOME, UNLIMITED);
     statChange("Leftovers", foodsOwned[Leftover], 1, 1);
+    if (petScore(ARGS) >= GREETING_SCORE_MIN) {
+        cout << "I should probably che- huh?" << endl;
+        prompt('C', "atch pet");
+        cout << name << " jumps into your hands." << endl;
+        cout << "Hey! I'm back from work now." << endl;
+        cout << "As I was saying..." << endl;
+    }
     cout << "I should probably check a couple things before doing anything." << endl;
     pause();
 }
@@ -897,19 +1007,18 @@ void visitStore(PARAMS) {
     while (true) {
         validChoice = true;
 
-        // L, XRSD, FPCB
         cout << "* Welcome to FurFriends! How may I help you today?" << endl;
         cout << "Pet budget: PHP " << money << endl;
         cout << endl;
         cout << "> [L]eave" << endl;
 
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < TOY_COUNT; i++) {
             if (!toysOwned[i]) {
                 cout << "> Buy " << TOY_PROMPTS[i] << " (PHP " << TOY_PRICES[i] << ")" << endl;
             }
         }
 
-        for (int i = 1; i < 5; i++) {
+        for (int i = 1; i < FOOD_COUNT; i++) {
             cout << "> Buy " << FOOD_PROMPTS[i] << " (PHP " << FOOD_PRICES[i] << ")" << endl;
         }
 
@@ -1010,26 +1119,28 @@ void visitStore(PARAMS) {
 }
 
 void quit(PARAMS) {
-    if (confirm("Are you sure you wanna give up?")) {
-        if (confirm("Will you give " + name + " to your neighbor, Kate, instead?")) {
-            cout << "Alright then. We'll call her up today, and say goodbye to " << name << " tomorrow." << endl;
-            ending = GiveUp;
-            sleep(ARGS);
-        } else {
-            cout << "Then you'll have to stay." << endl;
-            pause();
-        }
-    } else {
+    cout << "(You can just press Ctrl+C to force quit anytime)" << endl;
+    if (!confirm("Are you sure you wanna give up?")) {
         cout << "I knew it. Who could say no to that little face." << endl;
         pause();
+        return;
     }
+    if (!confirm("Will you give " + name + " to your neighbor, Kate, instead?")) {
+        cout << "Then you'll have to stay." << endl;
+        pause();
+        return;
+    }
+    cout << "Alright then. We'll call her up today, and say goodbye to " << name << " tomorrow." << endl;
+    ending = GiveUp;
+    pause();
+    sleep(ARGS);
 }
 
 void playEnding(PARAMS) {
     switch (ending) {
+    case SkipQuit:
     case Ongoing:
         return;
-        break;
 
     case GiveUp:
         cout << "You donated your pet to your neighbor Kate." << endl;
@@ -1125,7 +1236,7 @@ void playEnding(PARAMS) {
         cout << "Those were yours?! They're amazing!" << endl;
         cout << "* Yeah, I know." << endl;
         cout << "* Hey animal thing, catch!" << endl;
-        eat(ARGS, Steak);
+        feedWith(ARGS, Steak);
         cout << "This is the best day ever, isn't it, " << name << "?" << endl;
         cout << "* PUFF!" << endl;
         prompt('T', "he end.");
@@ -1133,7 +1244,7 @@ void playEnding(PARAMS) {
 
     default:
         error();
-        break;
+        return;
     }
 
     if (ending != NewYear) {
