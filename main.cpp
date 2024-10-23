@@ -17,67 +17,256 @@ vststststlg fsfo pkoo pkoo sgoogwo
 // TODO:
 // test more stuff
 // enjoy game
-// replace these params before passing
-
-#define PARAMS \
-    bool toysOwned[], \
-    int foodsOwned[], \
-    int& happiness, \
-    int& nutrition, \
-    int& energy, \
-    int& health, \
-    string& name, \
-    int& money, \
-    int& day, \
-    int& hour, \
-    int& ending
-
-#define ARGS \
-    toysOwned, \
-    foodsOwned, \
-    happiness, \
-    nutrition, \
-    energy, \
-    health, \
-    name, \
-    money, \
-    day, \
-    hour, \
-    ending
 
 // TODO: char getChar(char& choice);
 bool confirm(string text);
 void prompt(char expected, string text);
 void pause();
 
-void findPet(PARAMS);
-void namePet(PARAMS);
-void menu(PARAMS);
+void findPet(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
+void namePet(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
+void menu(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
 
-int petScore(PARAMS);
-void remarkAboutPet(PARAMS);
+int petScore(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
+void remarkAboutPet(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
 
-void check(PARAMS);
-void checkPet(PARAMS);
-void checkCalendar(PARAMS);
+void check(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
+void checkPet(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
+void checkCalendar(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
 void showTime(int hour);
-void checkToys(PARAMS);
-void checkFood(PARAMS);
+void checkToys(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
+void checkFood(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
 
-void play(PARAMS);
-void playWith(PARAMS, int id);
-void feed(PARAMS);
-void feedWith(PARAMS, int id);
+void play(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
+void playWith(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending, int id
+);
+void feed(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
+void feedWith(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending, int id
+);
 
 void passTime(int & day, int & hour, int amount);
-void sleep(PARAMS);
+void sleep(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
 void statCheck(string statName, int stat);
 int statChange(string statName, int& stat, int change, int cap);
-void visitStore(PARAMS);
+void visitStore(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
 
-void quit(PARAMS);
+void quit(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
 
-void playEnding(PARAMS);
+void playEnding(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+);
 void error();
 
 // endings
@@ -210,11 +399,47 @@ int main() {
     int hour = 12 + 8;
     int ending = Ongoing;
 
-    findPet(ARGS);
+    findPet(
+        toysOwned,
+        foodsOwned,
+        happiness,
+        nutrition,
+        energy,
+        health,
+        name,
+        money,
+        day,
+        hour,
+        ending
+    );
     while (ending == Ongoing) {
-        menu(ARGS);
+        menu(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
     }
-    playEnding(ARGS);
+    playEnding(
+        toysOwned,
+        foodsOwned,
+        happiness,
+        nutrition,
+        energy,
+        health,
+        name,
+        money,
+        day,
+        hour,
+        ending
+    );
 
     return 0;
 }
@@ -256,7 +481,19 @@ void pause() {
     prompt('O', "k");
 }
 
-void findPet(PARAMS) {
+void findPet(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     char choice;
     bool creatureAdopted = false;
 
@@ -317,10 +554,34 @@ void findPet(PARAMS) {
             break;
         }
     }
-    namePet(ARGS);
+    namePet(
+        toysOwned,
+        foodsOwned,
+        happiness,
+        nutrition,
+        energy,
+        health,
+        name,
+        money,
+        day,
+        hour,
+        ending
+    );
 }
 
-void namePet(PARAMS) {
+void namePet(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     bool sure;
     do {
         name = "[unnamed]";
@@ -333,12 +594,48 @@ void namePet(PARAMS) {
     prompt('H', "ello!");
 }
 
-int petScore(PARAMS) {
+int petScore(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     return (happiness + nutrition + energy + health) / 40;
 }
 
-void remarkAboutPet(PARAMS) {
-    int score = petScore(ARGS);
+void remarkAboutPet(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
+    int score = petScore(
+        toysOwned,
+        foodsOwned,
+        happiness,
+        nutrition,
+        energy,
+        health,
+        name,
+        money,
+        day,
+        hour,
+        ending
+    );
     const string REMARKS[] = {
         "Listen. ", " deserves better.",
         "Uh, ", " looks a bit sick.",
@@ -355,23 +652,71 @@ void remarkAboutPet(PARAMS) {
     cout << REMARKS[score * 2] << name << REMARKS[score * 2 + 1] << endl;
 }
 
-void menu(PARAMS) {
+void menu(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     char choice;
 
-    remarkAboutPet(ARGS);
+    remarkAboutPet(
+        toysOwned,
+        foodsOwned,
+        happiness,
+        nutrition,
+        energy,
+        health,
+        name,
+        money,
+        day,
+        hour,
+        ending
+    );
 
     // past midnight rolls over to 0
     if (hour < TIME_WAKE) {
         cout << "It's past midnight." << endl;
         cout << "I should sleep." << endl;
         prompt('S', "leep");
-        sleep(ARGS);
+        sleep(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         return;
     }
     if (energy <= 0) {
         cout << name << " is very tired now." << endl;
         prompt('S', "leep");
-        sleep(ARGS);
+        sleep(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         return;
     }
 
@@ -394,31 +739,115 @@ void menu(PARAMS) {
 
     switch (choice) {
     case 'c':
-        check(ARGS);
+        check(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         break;
 
     case 'r':
-        namePet(ARGS);
+        namePet(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         break;
 
     case 'v':
-        visitStore(ARGS);
+        visitStore(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         break;
 
     case 'p':
-        play(ARGS);
+        play(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         break;
 
     case 'f':
-        feed(ARGS);
+        feed(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         break;
 
     case 's':
-        sleep(ARGS);
+        sleep(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         break;
 
     case 'g':
-        quit(ARGS);
+        quit(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         break;
 
     default:
@@ -428,7 +857,19 @@ void menu(PARAMS) {
     }
 }
 
-void check(PARAMS) {
+void check(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     char choice;
 
     while (true) {
@@ -449,19 +890,67 @@ void check(PARAMS) {
             break;
 
         case 'p':
-            checkPet(ARGS);
+            checkPet(
+                toysOwned,
+                foodsOwned,
+                happiness,
+                nutrition,
+                energy,
+                health,
+                name,
+                money,
+                day,
+                hour,
+                ending
+            );
             break;
 
         case 'c':
-            checkCalendar(ARGS);
+            checkCalendar(
+                toysOwned,
+                foodsOwned,
+                happiness,
+                nutrition,
+                energy,
+                health,
+                name,
+                money,
+                day,
+                hour,
+                ending
+            );
             break;
 
         case 't':
-            checkToys(ARGS);
+            checkToys(
+                toysOwned,
+                foodsOwned,
+                happiness,
+                nutrition,
+                energy,
+                health,
+                name,
+                money,
+                day,
+                hour,
+                ending
+            );
             break;
 
         case 'f':
-            checkFood(ARGS);
+            checkFood(
+                toysOwned,
+                foodsOwned,
+                happiness,
+                nutrition,
+                energy,
+                health,
+                name,
+                money,
+                day,
+                hour,
+                ending
+            );
             break;
 
         default:
@@ -488,7 +977,19 @@ void statCheck(string statName, int stat) {
     cout << "] (" << stat << "/" << MAX_STAT << ")" << endl;
 }
 
-void checkPet(PARAMS) {
+void checkPet(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     cout << "Alright, let's see how " << name << " is doing..." << endl;
     cout << "Name: " << name << endl;
     statCheck("Happiness: ", happiness);
@@ -497,7 +998,19 @@ void checkPet(PARAMS) {
     statCheck("Health:    ", health);
 }
 
-void checkCalendar(PARAMS) {
+void checkCalendar(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     int timeLeft = HEALTHY_BEDTIME_MAX - hour;
     cout << "Let's look at how we're doing..." << endl;
 
@@ -543,7 +1056,19 @@ void showTime(int hour) {
     }
 }
 
-void checkToys(PARAMS) {
+void checkToys(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     int toyCount = 0;
     const string TOY_CHECK_MESSAGES[] = {
         "We have some cardboard boxes...",
@@ -586,7 +1111,19 @@ void checkToys(PARAMS) {
     }
 }
 
-void checkFood(PARAMS) {
+void checkFood(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     int foodCount = 0;
     const string TEXT[] = {
         "leftover meal", "s", "from lunch",
@@ -621,7 +1158,19 @@ void checkFood(PARAMS) {
     }
 }
 
-void play(PARAMS) {
+void play(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     char choice;
     bool validChoice = true;
     int id;
@@ -676,14 +1225,39 @@ void play(PARAMS) {
             pause();
             continue;
         }
-        playWith(ARGS, id);
+        playWith(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending,
+            id
+        );
         passTime(day, hour, 1);
         pause();
         break;
     }
 }
 
-void playWith(PARAMS, int id) {
+void playWith(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending, int id
+) {
     int energyCost = TOY_ENERGY_COSTS[id];
     if (energyCost > energy) {
         cout << "Hey, " << name << "... you wanna play?" << endl;
@@ -735,7 +1309,19 @@ void playWith(PARAMS, int id) {
     statChange("Energy", energy, -energyCost, MAX_STAT);
 }
 
-void feed(PARAMS) {
+void feed(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     char choice;
     bool validChoice = true;
     int id;
@@ -807,12 +1393,37 @@ void feed(PARAMS) {
         return;
     }
 
-    feedWith(ARGS, id);
+    feedWith(
+        toysOwned,
+        foodsOwned,
+        happiness,
+        nutrition,
+        energy,
+        health,
+        name,
+        money,
+        day,
+        hour,
+        ending,
+        id
+    );
     statChange(FOOD_COUNT_NAMES[id], foodsOwned[id], -1, UNLIMITED);
     passTime(day, hour, 1);
 }
 
-void feedWith(PARAMS, int id) {
+void feedWith(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending, int id
+) {
     bool onlyLeftover = true;
     for (int i = 0; i < FOOD_COUNT; i++) {
        if (foodsOwned[i] > 0) {
@@ -917,7 +1528,19 @@ void passTime(int & day, int & hour, int amount) {
     statChange("Day", day, daysPassed, DAY_LIMIT + 1);
 }
 
-void sleep(PARAMS) {
+void sleep(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     const string EVAL_STRINGS[] = {
         "was", "very happy today",
         "has", "been eating well",
@@ -937,6 +1560,7 @@ void sleep(PARAMS) {
         sleptWell
     };
     int wakeTime = TIME_WAKE;
+    int score;
 
     cout << "Sleepy time..." << endl;
     prompt('G', "ood night...");
@@ -1010,7 +1634,20 @@ void sleep(PARAMS) {
     cout << "...and " << INCOME << " goes for my pet's budget." << endl;
     statChange("Pet Budget", money, INCOME, UNLIMITED);
     statChange("Leftovers", foodsOwned[Leftover], 1, 1);
-    if (petScore(ARGS) >= GREETING_SCORE_MIN) {
+    score = petScore(
+        toysOwned,
+        foodsOwned,
+        happiness,
+        nutrition,
+        energy,
+        health,
+        name,
+        money,
+        day,
+        hour,
+        ending
+    );
+    if (score >= GREETING_SCORE_MIN) {
         cout << "I should probably che- huh?" << endl;
         prompt('C', "atch pet");
         cout << name << " jumps into your hands." << endl;
@@ -1021,7 +1658,19 @@ void sleep(PARAMS) {
     pause();
 }
 
-void visitStore(PARAMS) {
+void visitStore(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     char choice;
     bool validChoice;
     bool toy;
@@ -1149,7 +1798,19 @@ void visitStore(PARAMS) {
     passTime(day, hour, 1);
 }
 
-void quit(PARAMS) {
+void quit(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     cout << "(You can just press Ctrl+C to force quit anytime)" << endl;
     if (!confirm("Are you sure you wanna give up?")) {
         cout << "I knew it. Who could say no to that little face." << endl;
@@ -1164,21 +1825,43 @@ void quit(PARAMS) {
     cout << "Alright then. We'll call her up today, and say goodbye to " << name << " tomorrow." << endl;
     ending = GiveUp;
     pause();
-    sleep(ARGS);
+    sleep(
+        toysOwned,
+        foodsOwned,
+        happiness,
+        nutrition,
+        energy,
+        health,
+        name,
+        money,
+        day,
+        hour,
+        ending
+    );
 }
 
-void playEnding(PARAMS) {
+void playEnding(
+    bool toysOwned[],
+    int foodsOwned[],
+    int& happiness,
+    int& nutrition,
+    int& energy,
+    int& health,
+    string& name,
+    int& money,
+    int& day,
+    int& hour,
+    int& ending
+) {
     switch (ending) {
     case Ongoing:
         return;
 
     case GiveUp:
         cout << "You donated your pet to your neighbor Kate." << endl;
-        prompt('Y', "eah...");
         cout << "She'll take good care of " << name << ". It's a promise." << endl;
-        pause();
         cout << "Rest easy. You still have stuff to do later." << endl;
-        pause();
+        prompt('Y', "eah...");
         break;
 
     case Joyride:
@@ -1186,11 +1869,10 @@ void playEnding(PARAMS) {
         prompt('W', "hat?");
         cout << name << " just took off with the drone." << endl;
         prompt('H', "ow?");
-        cout << "I don't know! He just- stole the controller and-" << endl;
+        cout << "I don't know! It just- stole the controller and-" << endl;
         cout << name << "is just gone now!" << endl;
-        prompt('O', "k?");
         cout << "Wherever it's going, it's probably home." << endl;
-        pause();
+        prompt('O', "k?");
         break;
 
     case Unhappy:
@@ -1199,7 +1881,6 @@ void playEnding(PARAMS) {
         cout << "I... I don't know. Let's look around." << endl;
         pause();
         cout << "You looked around for " << name << ", and found your pet with your neighbor Kate." << endl;
-        pause();
         cout << "It looks... happy." << endl;
         cout << "Happier than when you took care of it." << endl;
         prompt('Y', "eah...");
@@ -1252,7 +1933,19 @@ void playEnding(PARAMS) {
         cout << "Let's look at how we're doing..." << endl;
         showTime(hour);
         prompt('C', "heck pet");
-        checkPet(ARGS);
+        checkPet(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending
+        );
         cout << "WOW!" << endl;
         prompt('G', "o outside");
         cout << "*WHISTLE NYOOM SSSS-BOOM!* *c-r-a-c-k-l-e*" << endl;
@@ -1266,7 +1959,20 @@ void playEnding(PARAMS) {
         cout << "Those were yours?! They're amazing!" << endl;
         cout << "* Yeah, I know." << endl;
         cout << "* Hey animal thing, catch!" << endl;
-        feedWith(ARGS, Steak);
+        feedWith(
+            toysOwned,
+            foodsOwned,
+            happiness,
+            nutrition,
+            energy,
+            health,
+            name,
+            money,
+            day,
+            hour,
+            ending,
+            Steak
+        );
         cout << "This is the best day ever, isn't it, " << name << "?" << endl;
         cout << "* PUFF!" << endl;
         prompt('T', "he end.");
