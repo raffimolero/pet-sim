@@ -4,28 +4,28 @@ using namespace std;
 
 /* walkthrough: just copy paste these into the terminal and they will play the game for you
 TODO: [DRONE ENDING - FISHBALL STRAT]
-oaooo Puff yh fcfo phlo sgoogwo
-vrtctlg flfo fcfo proo sgoogwo
+oaooo Drone yh fcfo phlo sgoogwo
+v rt ct pt ftftftftftftft lg flfo fcfo proo sgoogwo
 flfo proo proo proo sgoogwo
 flfo fffo proo proo sgoogwo
-flfo proo ffoo sgoogwo
+flfo fffo fffo proo sgoogwo
+flfo fpco proo proo sgoogwo
+flfo fffo fffo proo sgoogwo
+flfo fffo fffo proo sgoogwo
+proo proo fffo flfo sgoogwo
+proo phlo fffo flfo sgoogwo
+v ct ptptptptpt ftftftftftftft lg flfo proo phlo sgoogwo
+proo proo fffo flfo sgoogwo
+proo proo fffo flfo sgoogwo
+flfo fpco proo proo sgoogwo
+flfo fffo fffo proo sgoogwo
+flfo fffo fffo proo sgoogwo
+fpco fpco proo proo sgoogwo
+fcfo proo proo proo sgoogwo
 
-
-
-
-
-vftftctlg flfo proo proo sgoogwo
+fpco fpco fffo proo sgoogwo
 flfo proo proo proo sgoogwo
-
-
-flfo fffo pkoo sgoogwo
-flfo fcfo pkoo sgoogwo
-flfo fffo pkoo sgoogwo
-vftftftftftftftftftftlg pkoo fffo flfo sgoogwo
-pkoo fffo flfo sgoogwo
-pkoo fffo flfo sgoogwo
-pkoo fffo flfo sgoogwo
-pkoo fffo flfo sgoogwo
+v dt lg pds321gowhog
 
 WIP: [DRONE ENDING - FISHBOARD STRAT]
 oaooo Puff yh fcfo phlo sgoogwo
@@ -1306,6 +1306,7 @@ void playWith(
         cout << "..." << endl;
         cout << "Hm. Looks like " << name << " is too tired for that." << endl;
         pause();
+        return;
     }
 
     switch (id) {
@@ -1339,7 +1340,6 @@ void playWith(
         prompt('1', "!");
         prompt('G', "O!");
         cout << "NYOOOOOOOOOOOOOOOOOM!" << endl;
-        pause();
         ending = Joyride;
         break;
 
@@ -2035,6 +2035,9 @@ void playEnding(
 }
 
 void error() {
+    string in;
     cout << "AN ERROR OCCURRED RIP" << endl;
-    pause();
+    while (true) {
+        cin >> in;
+    }
 }
