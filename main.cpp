@@ -2,59 +2,68 @@
 #include <string>
 using namespace std;
 
-/* walkthrough: just copy paste these into the terminal and they will play the game for you
-TODO: [DRONE ENDING - FISHBALL STRAT]
-oaooo Drone yh fcfo phlo sgoogwo
-v rt ct pt ftftftftftftft lg flfo fcfo proo sgoogwo
-flfo proo proo proo sgoogwo
-flfo fffo proo proo sgoogwo
-flfo fffo fffo proo sgoogwo
-flfo fpco proo proo sgoogwo
-flfo fffo fffo proo sgoogwo
-flfo fffo fffo proo sgoogwo
-proo proo fffo flfo sgoogwo
-proo phlo fffo flfo sgoogwo
-v ct ptptptptpt ftftftftftftft lg flfo proo phlo sgoogwo
-proo proo fffo flfo sgoogwo
-proo proo fffo flfo sgoogwo
-flfo fpco proo proo sgoogwo
-flfo fffo fffo proo sgoogwo
-flfo fffo fffo proo sgoogwo
-fpco fpco proo proo sgoogwo
-fcfo proo proo proo sgoogwo
+/*
+walkthrough: just copy paste these into the terminal and they will play the game for you
+the numbers represent the days, and they are no-ops in my program.
+do not copy paste the labels for each walkthrough.
 
-fpco fpco fffo proo sgoogwo
-flfo proo proo proo sgoogwo
-v dt lg pds321gowhog
+[DRONE ENDING - FISHBALL STRAT (perfect health until sleeping from 19-20)]
+ 1. oaooo Puff yh fcfo phlo sgoogwo
+ 2. v rt ct pt ftftftftftftft lg flfo fcfo proo sgoogwo
+ 3. flfo proo proo proo sgoogwo
+ 4. flfo fffo proo proo sgoogwo
+ 5. flfo fffo fffo proo sgoogwo
+ 6. flfo fpco proo proo sgoogwo
+ 7. flfo fffo fffo proo sgoogwo
+ 8. flfo fffo fffo proo sgoogwo
+ 9. proo proo fffo flfo sgoogwo
+10. proo phlo fffo flfo sgoogwo
+11. v ct ptptptptpt ftftftftftftft lg flfo proo phlo sgoogwo
+12. proo proo fffo flfo sgoogwo
+13. proo proo fffo flfo sgoogwo
+14. flfo fpco proo proo sgoogwo
+15. flfo fffo fffo proo sgoogwo
+16. flfo fffo fffo proo sgoogwo
+17. fpco fpco proo proo sgoogwo
+18. fcfo proo proo proo sgoogwo
+19. fpco fpco fffo proo sgoogwo
+20. flfo proo proo proo sgoogwo
+21. v dt lg pds321gowhog
 
-WIP: [DRONE ENDING - FISHBOARD STRAT]
-oaooo Puff yh fcfo phlo sgoogwo
-vktlg fffo fffo pkoo sgoogwo
-vftftctlg flfo pkoo pkoo sgoogwo
-flfo fffo pkoo sgoogwo
-flfo fcfo pkoo sgoogwo
-flfo fffo pkoo sgoogwo
-vftftftftftftftftftftlg pkoo fffo flfo sgoogwo
-pkoo fffo flfo sgoogwo
-pkoo fffo flfo sgoogwo
-pkoo fffo flfo sgoogwo
-pkoo fffo flfo sgoogwo
-
-WIP: [DRONE ENDING - STEAKBOARD STRAT]
-oaooo Puff yh fcfo phlo sgoogwo
-fffo fffo phlo phlo sgoogwo
-flfo phlo phlo phlo sgoogwo
-vktststlg fsfo pkoo sgoogwo
-flfo flfo flfo pkoo sgoogwo
-flfo flfo fsfo pkoo sgoogwo
-vststststlg fsfo pkoo pkoo sgoogwo
+[NEW YEAR ENDING - FISHBALL TO STEAKBOARD STRAT (perfect health)]
+ 1. oaooo Puff yh fcfo phlo sgoogwo
+ 2. v rt ct pt ftftftftftftft lg flfo fcfo proo sgoogwo
+ 3. flfo proo proo proo sgoogwo
+ 4. flfo fffo proo proo sgoogwo
+ 5. flfo fffo fffo proo sgoogwo
+ 6. flfo fpco proo proo sgoogwo
+ 7. flfo fffo fffo proo sgoogwo
+ 8. flfo fffo fffo proo sgoogwo
+ 9. proo proo fffo flfo sgoogwo
+10. proo phlo fffo flfo sgoogwo
+11. v ct ptptptptpt ftftftftftftft kt stst lg flfo proo phlo sgoogwo
+12. proo proo fffo flfo sgoogwo
+13. proo proo fffo flfo sgoogwo
+14. flfo fpco proo proo sgoogwo
+15. flfo fffo fffo proo sgoogwo
+16. flfo fffo fffo proo sgoogwo
+17. fpco fpco proo proo sgoogwo
+18. flfo fcfo pkoo pkoo sgoogwo
+19. flfo fpco fpco pkoo sgoogwo
+20. flfo fffo pkoo pkoo sgoogwo
+21. v ststststststststststststst lg flfo fsfo pkoo sgoogwo
+22. flfo fsfo fsfo pkoo sgoogwo
+23. fsfo fsfo pkoo pkoo sgoogwo
+24. fsfo pkoo pkoo pkoo sgoogwo
+25. fsfo pkoo pkoo pkoo sgoogwo
+26. fsfo pkoo pkoo pkoo sgoogwo
+27. fsfo fsfo pkoo pkoo sgoogwo
+28. fsfo fsfo pkoo pkoo sgoogwo
+29. fsfo pkoo pkoo pkoo sgoogwo
+30. fsfo fsfo pkoo pkoo sgoogwo
+31. v stst lg fsfo pkoo pkoo sgoogzzhcccglcfot
 */
 
-// TODO:
-// test more stuff
-// enjoy game
-
-// TODO: char getChar(char& choice);
 bool confirm(string text);
 void prompt(char expected, string text);
 void pause();
@@ -369,8 +378,8 @@ const string TOY_PROMPTS[] = {
     "super cool [D]rone"
 };
 const int TOY_PRICES[]           = { 0, 25, 50, 300, 1500};
-const int TOY_ENERGY_COSTS[]     = { 5, 10, 10,  15,   25, 5};
-const int TOY_HAPPINESS_VALUES[] = {10, 15, 20,  25,   50, 5};
+const int TOY_ENERGY_COSTS[]     = { 5, 10, 10,  25,   50, 5};
+const int TOY_HAPPINESS_VALUES[] = {10, 15, 20,  25,  100, 5};
 
 const int PLAY_FOOD_HAPPINESS_MIN = 50;
 const int PLAY_FOOD_NUTRITION_MAX = HEALTHY_NUTRITION_MIN;
@@ -1653,7 +1662,7 @@ void sleep(
         ending = Hungry;
     } else if (happiness <= 0) {
         ending = Unhappy;
-    } else if (day > DAY_LIMIT) {
+    } else if (day >= DAY_LIMIT) {
         ending = NewYear;
         wakeTime = MIDNIGHT;
     }
@@ -1915,7 +1924,7 @@ void playEnding(
         cout << name << " just took off with the drone." << endl;
         prompt('H', "ow?");
         cout << "I don't know! It just- stole the controller and-" << endl;
-        cout << name << "is just gone now!" << endl;
+        cout << name << " is just gone now!" << endl;
         cout << "Wherever it's going, it's probably home." << endl;
         prompt('O', "k?");
         break;
@@ -1994,7 +2003,7 @@ void playEnding(
         cout << "WOW!" << endl;
         prompt('G', "o outside");
         cout << "*WHISTLE NYOOM SSSS-BOOM!* *c-r-a-c-k-l-e*" << endl;
-        cout << name << " jumps on your hand.";
+        cout << name << " jumps on your hand." << endl;
         prompt('L', "ift " + name + " up!");
         cout << "Uppies!" << endl;
         statChange("Happiness", happiness, TOY_HAPPINESS_VALUES[Hand], MAX_STAT * 2);
