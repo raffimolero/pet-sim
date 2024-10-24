@@ -3,8 +3,44 @@
 using namespace std;
 
 /* walkthrough: just copy paste these into the terminal and they will play the game for you
-TODO: [DRONE ENDING - FISHBOARD STRAT]
-[DRONE ENDING - STEAKBOARD STRAT]
+TODO: [DRONE ENDING - FISHBALL STRAT]
+oaooo Puff yh fcfo phlo sgoogwo
+vrtctlg flfo fcfo proo sgoogwo
+flfo proo proo proo sgoogwo
+flfo fffo proo proo sgoogwo
+flfo proo ffoo sgoogwo
+
+
+
+
+
+vftftctlg flfo proo proo sgoogwo
+flfo proo proo proo sgoogwo
+
+
+flfo fffo pkoo sgoogwo
+flfo fcfo pkoo sgoogwo
+flfo fffo pkoo sgoogwo
+vftftftftftftftftftftlg pkoo fffo flfo sgoogwo
+pkoo fffo flfo sgoogwo
+pkoo fffo flfo sgoogwo
+pkoo fffo flfo sgoogwo
+pkoo fffo flfo sgoogwo
+
+WIP: [DRONE ENDING - FISHBOARD STRAT]
+oaooo Puff yh fcfo phlo sgoogwo
+vktlg fffo fffo pkoo sgoogwo
+vftftctlg flfo pkoo pkoo sgoogwo
+flfo fffo pkoo sgoogwo
+flfo fcfo pkoo sgoogwo
+flfo fffo pkoo sgoogwo
+vftftftftftftftftftftlg pkoo fffo flfo sgoogwo
+pkoo fffo flfo sgoogwo
+pkoo fffo flfo sgoogwo
+pkoo fffo flfo sgoogwo
+pkoo fffo flfo sgoogwo
+
+WIP: [DRONE ENDING - STEAKBOARD STRAT]
 oaooo Puff yh fcfo phlo sgoogwo
 fffo fffo phlo phlo sgoogwo
 flfo phlo phlo phlo sgoogwo
@@ -196,6 +232,7 @@ void feed(
     int& hour,
     int& ending
 );
+void remarkAboutFood(int foodCount);
 void feedWith(
     bool toysOwned[],
     int foodsOwned[],
@@ -1145,11 +1182,16 @@ void checkFood(
         }
     }
 
+    remarkAboutFood(foodCount);
+}
+
+void remarkAboutFood(int foodCount) {
     // operates over ranges, shouldn't use switch case
-    if (foodCount == 1) {
-        cout << "There's nothing good here." << endl;
-        cout << "I should buy some at the store." << endl;
-    } else if (foodCount <= 3) {
+    if (foodCount == 0) {
+        cout << "..." << endl;
+        cout << "...That's not good." << endl;
+        cout << "I need to buy food at the store as soon as possible." << endl;
+    } else if (foodCount <= 2) {
         cout << "I should buy more food soon." << endl;
     } else if (foodCount <= 6) {
         cout << "Should be enough for now." << endl;
@@ -1325,6 +1367,7 @@ void feed(
     char choice;
     bool validChoice = true;
     int id;
+    int foodCount = 0;
     int energyValue, happinessValue, nutritionValue;
 
     cout << "What should we feed " << name << "?" << endl;
@@ -1332,8 +1375,10 @@ void feed(
     for (int i = 0; i < 5; i++) {
         if (foodsOwned[i] > 0) {
             cout << "> " << FOOD_PROMPTS[i] << " (" << foodsOwned[i] << " left)" << endl;
+            foodCount += foodsOwned[i];
         }
     }
+    remarkAboutFood(foodCount);
     cout << "> ";
     cin >> choice;
     choice = tolower(choice);
